@@ -292,3 +292,66 @@ IF statements are used to:
 
 ![IF Function](Excel/02_IF_Function_Screenshot.png)
 
+# Project 03 - COUNTIF Function
+
+## Objective
+
+Learn how to count records matching specific conditions.
+
+---
+
+## Formula
+
+```excel
+=COUNTIF(B2:B6,"HR")
+```
+
+## Result
+
+2
+
+---
+
+## Additional Examples
+
+### Sales Employees
+
+```excel
+=COUNTIF(B2:B6,"Sales")
+```
+
+Result:
+
+```text
+2
+```
+
+### IT Employees
+
+```excel
+=COUNTIF(B2:B6,"IT")
+```
+
+Result:
+
+```text
+1
+```
+
+---
+
+## Business Intelligence Usage
+
+COUNTIF is commonly used for:
+
+- Customer segmentation
+- Employee reporting
+- KPI tracking
+- Operational analytics
+- Dashboard metrics
+
+---
+
+## Screenshot
+
+![COUNTIF Function](03_COUNTIF_Screenshot.png)
