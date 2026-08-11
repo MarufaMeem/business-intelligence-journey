@@ -206,6 +206,8 @@ C2:C6
 
 ---
 
+![Excel Basics](Excel/01_Excel_Basics_Screenshot.png)
+
 ## Real Business Intelligence Usage
 
 Business Intelligence Analysts use these functions to:
@@ -215,3 +217,78 @@ Business Intelligence Analysts use these functions to:
 - Find highest sales month
 - Find lowest performing region
 - Build KPI dashboards
+
+
+# Project 02 - IF Function
+
+## Objective
+
+Learn how to classify data using conditional logic.
+
+---
+
+## Dataset
+
+| Employee | Department | Salary |
+|----------|------------|---------|
+| Rahim | Sales | 25000 |
+| Karim | HR | 30000 |
+| Jannat | Sales | 40000 |
+| Nila | IT | 50000 |
+| Rafi | HR | 35000 |
+
+---
+
+## Formula
+
+```excel
+=IF(C2>30000,"High","Low")
+```
+
+---
+
+## Logic
+
+If salary is greater than 30000:
+
+High
+
+Otherwise:
+
+Low
+
+---
+
+## Result
+
+| Employee | Salary | Salary Level |
+|----------|---------|---------|
+| Rahim | 25000 | Low |
+| Karim | 30000 | Low |
+| Jannat | 40000 | High |
+| Nila | 50000 | High |
+| Rafi | 35000 | High |
+
+---
+
+## Business Intelligence Usage
+
+IF statements are used to:
+
+- Classify customers
+- Categorize transactions
+- Create KPI indicators
+- Generate business rules
+- Support dashboard reporting
+
+---
+
+## Skills Learned
+
+- IF Function
+- Conditional Logic
+- Data Classification
+- Business Rule Implementation
+
+![IF Function](Excel/02_IF_Function_Screenshot.png)
+
