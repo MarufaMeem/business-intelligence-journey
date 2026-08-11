@@ -354,4 +354,4 @@ COUNTIF is commonly used for:
 
 ## Screenshot
 
-![COUNTIF Function](03_COUNTIF_Screenshot.png)
+![COUNTIF Function](Excel/03_COUNTIF_Screenshot.png)
