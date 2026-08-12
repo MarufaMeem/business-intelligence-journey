@@ -2461,17 +2461,6 @@ With KPIs, management can make decisions quickly.
 ![Power BI](PowerBI/powerbi.png)
 
 
-##  Table of Contents
-
-1. [What is Power BI?](#-what-is-power-bi)
-2. [Power Query (Data Transformation)](#-power-query-data-transformation)
-3. [DAX Fundamentals](#-dax-fundamentals)
-4. [DAX — Intermediate & Advanced](#-dax--intermediate--advanced)
-5. [Data Modeling](#-data-modeling)
-6. [Reports & Visuals](#-reports--visuals)
-7. [Power BI Service (Cloud)](#-power-bi-service-cloud)
-8. [How to Use This Repo](#-how-to-use-this-repo)
-9. [Resources](#-resources)
 
 
 ---
