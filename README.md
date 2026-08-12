@@ -2456,4 +2456,501 @@ Without KPIs, management only sees raw data.
 With KPIs, management can make decisions quickly.
 
 ---
+# 📊 Power BI Complete Learning Guide
+
+![Power BI](Power/power.png)
+
+
+##  Table of Contents
+
+1. [What is Power BI?](#-what-is-power-bi)
+2. [Power Query (Data Transformation)](#-power-query-data-transformation)
+3. [DAX Fundamentals](#-dax-fundamentals)
+4. [DAX — Intermediate & Advanced](#-dax--intermediate--advanced)
+5. [Data Modeling](#-data-modeling)
+6. [Reports & Visuals](#-reports--visuals)
+7. [Power BI Service (Cloud)](#-power-bi-service-cloud)
+8. [How to Use This Repo](#-how-to-use-this-repo)
+9. [Resources](#-resources)
+
+
+---
+##  What is Power BI?
+
+Power BI is Microsoft's business intelligence tool used to:
+- **Connect** to data sources (Excel, SQL, Web, APIs, etc.)
+- **Transform** raw data into clean, usable tables (using **Power Query**)
+- **Model** relationships between tables (Star Schema)
+- **Analyze** data using formulas (using **DAX**)
+- **Visualize** insights through interactive dashboards and reports
+
+Think of it as: **Get Data → Clean Data (Power Query) → Model Data → Calculate (DAX) → Visualize → Publish (Service)**
+
+---
+
+##  Power Query (Data Transformation)
+
+Power Query is the tool inside Power BI used to **clean and shape data before it hits your report**. It works like a recipe — every transformation step is recorded and can be replayed automatically every time data refreshes.
+
+ Access it via: `Home → Transform Data`
+
+### 1. Remove Columns
+Deletes unnecessary columns to keep your data model clean and lightweight.
+- Right-click a column → **Remove** (or **Remove Other Columns** to keep only selected ones)
+-   *Tip: Fewer columns = faster reports.*
+
+### 2. Rename Columns
+Gives columns clear, business-friendly names.
+- Double-click the column header, or right-click → **Rename**
+-  *Tip: Avoid spaces/special characters if you'll reference the column in DAX often.*
+
+### 3. Change Data Type
+Ensures each column is stored correctly (Text, Whole Number, Decimal, Date, Boolean, etc.)
+- Click the data type icon next to the column header
+-  *Wrong data types are the #1 cause of DAX errors for beginners.*
+
+### 4. Replace Values
+Finds and replaces specific values in a column (e.g., replacing `"N/A"` with `null`, or fixing typos).
+- Right-click column → **Replace Values**
+
+### 5. Remove Duplicates
+Removes duplicate rows based on selected column(s) to avoid double-counting.
+- Right-click column(s) → **Remove Duplicates**
+-  *Always check whether duplicates are true errors or valid repeated transactions before removing.*
+
+### 6. Filter Rows
+Keeps only the rows that meet certain conditions (e.g., only "2024" sales, exclude blanks).
+- Click the dropdown arrow on any column header → apply filter conditions
+
+### 7. Custom Column
+Creates a brand-new column using a custom Power Query (M) formula.
+- `Add Column → Custom Column`
+```m
+= [Price] * [Quantity]
+```
+
+### 8. Conditional Column
+Creates a column based on if/then logic — no formula writing needed, built through a UI wizard.
+- `Add Column → Conditional Column`
+- Example: If `Sales > 1000` then `"High"` else `"Low"`
+
+### 9. Split/Merge Columns
+- **Split Column**: Breaks one column into multiple (e.g., splitting "First Last" into First Name / Last Name) using a delimiter.
+- **Merge Columns**: Combines multiple columns into one (e.g., combining City + State).
+
+### 10. Group By
+Aggregates data — similar to a Pivot Table's grouping. Example: Total Sales grouped by Region.
+- `Transform → Group By` → choose column to group by + aggregation (Sum, Count, Average, etc.)
+
+### 11. Merge Queries
+Power Query's version of a SQL **JOIN** — combines two tables based on a matching column.
+- `Home → Merge Queries`
+- Choose Join Kind: Inner, Left Outer, Right Outer, Full Outer, Anti Join
+
+### 12. Append Queries
+Stacks two or more tables **on top of each other** (like SQL `UNION`) — used when tables have the same columns but different rows (e.g., Jan sales + Feb sales).
+- `Home → Append Queries`
+
+### 13. Pivot/Unpivot
+- **Unpivot**: Converts columns into rows — turns "wide" data into "long/tidy" data. Extremely common when cleaning Excel exports (e.g., unpivoting Jan, Feb, Mar columns into a single "Month" column).
+- **Pivot**: The reverse — converts row values into columns.
+- `Transform → Pivot Column` / `Unpivot Columns`
+
+---
+
+##  DAX Fundamentals
+
+DAX is the formula language used in Power BI to build calculations. If Power Query is about **shaping** data, DAX is about **calculating and analyzing** it.
+
+### Measures vs Calculated Columns
+| | **Measure** | **Calculated Column** |
+|---|---|---|
+| Calculated | At query/visual time (dynamically) | At data refresh time (row-by-row) |
+| Storage | Not stored, computed on the fly | Stored in the table, takes up memory |
+| Context | Responds to filters/slicers | Fixed per row |
+| Use case | Aggregations (Total Sales, Avg Price) | Row-level classification (e.g., Age Group) |
+| Where used | Visuals, cards, KPIs | Can be used as a filter/axis/slicer field |
+
+>  **Rule of thumb**: If you're aggregating (sum, average, count) → use a **Measure**. If you need a static per-row value → use a **Calculated Column**.
+
+### `SUM()`
+Adds up all values in a numeric column.
+```dax
+Total Sales = SUM(Sales[SalesAmount])
+```
+
+### `AVERAGE()`
+Calculates the arithmetic mean of a column.
+```dax
+Avg Sales = AVERAGE(Sales[SalesAmount])
+```
+
+### `DISTINCTCOUNT()`
+Counts the number of **unique** values in a column.
+```dax
+Unique Customers = DISTINCTCOUNT(Sales[CustomerID])
+```
+
+### `CALCULATE()`
+The most important function in DAX. It changes the **filter context** of a calculation.
+```dax
+Sales 2024 = CALCULATE(SUM(Sales[SalesAmount]), Sales[Year] = 2024)
+```
+>  Almost every advanced DAX pattern (YoY growth, running totals, RLS) is built using `CALCULATE()`.
+
+### `FILTER()`
+Returns a filtered **table** (not a value) — usually used inside other functions like `CALCULATE()` or `SUMX()`.
+```dax
+High Value Sales =
+CALCULATE(
+    SUM(Sales[SalesAmount]),
+    FILTER(Sales, Sales[SalesAmount] > 1000)
+)
+```
+
+### `IF()`
+Standard conditional logic — returns one value if a condition is true, another if false.
+```dax
+Sales Status = IF(SUM(Sales[SalesAmount]) > 5000, "High", "Low")
+```
+
+### `SWITCH()`
+A cleaner alternative to writing multiple nested `IF()` statements.
+```dax
+Sales Category =
+SWITCH(
+    TRUE(),
+    SUM(Sales[SalesAmount]) > 10000, "Excellent",
+    SUM(Sales[SalesAmount]) > 5000, "Good",
+    "Needs Improvement"
+)
+```
+
+### `DIVIDE()`
+A safe division function that automatically handles divide-by-zero errors (returns blank instead of an error).
+```dax
+Profit Margin = DIVIDE(SUM(Sales[Profit]), SUM(Sales[SalesAmount]), 0)
+```
+
+### `ALL()`
+Removes filters from a table or column — useful for calculating "% of total" style metrics.
+```dax
+% of Total Sales =
+DIVIDE(
+    SUM(Sales[SalesAmount]),
+    CALCULATE(SUM(Sales[SalesAmount]), ALL(Sales))
+)
+```
+
+### `REMOVEFILTERS()`
+A more explicit, modern alternative to `ALL()` — clears filters from specific columns/tables while making the intent clearer in your code.
+```dax
+Total Sales All Regions =
+CALCULATE(SUM(Sales[SalesAmount]), REMOVEFILTERS(Sales[Region]))
+```
+
+### `RELATED()`
+Pulls a value from a **related table** (used on the "many" side of a relationship) — similar to a VLOOKUP but relationship-driven.
+```dax
+Category Name = RELATED(Products[Category])
+```
+
+### `RELATEDTABLE()`
+Returns a **table** of related rows from the "many" side, used from the "one" side of a relationship.
+```dax
+Number of Orders = COUNTROWS(RELATEDTABLE(Sales))
+```
+
+---
+
+##  DAX — Intermediate & Advanced
+
+### Row Context vs Filter Context
+This is the single most important concept for understanding *why* DAX behaves the way it does.
+
+- **Row Context**: Exists when DAX evaluates a formula **one row at a time** — like in a Calculated Column, or inside iterator functions (`SUMX`, `FILTER`). DAX "walks" through the table row by row.
+- **Filter Context**: Exists when a set of filters (from slicers, visuals, or `CALCULATE`) narrows down which rows are visible **before** an aggregation happens. A Measure like `SUM(Sales[Amount])` on a Region visual is filtered by whatever Region is currently selected.
+
+```dax
+// Row context example — evaluated per row, then implicitly summed
+Total Revenue Column = [Price] * [Quantity]
+
+// Filter context example — depends on what's selected in the report
+Total Revenue Measure = SUM(Sales[Price]) * SUM(Sales[Quantity])
+```
+>  *These two examples do NOT always give the same result — that's the whole point of understanding context.*
+
+`CALCULATE()` is special because it can **transition row context into filter context** — this is called **context transition**, and it's why `CALCULATE()` is used so heavily inside calculated columns and iterators.
+
+### `SUMX()` / Iterator Functions
+Iterator functions (`SUMX`, `COUNTX`, `AVERAGEX`, `MAXX`, `MINX`, `RANKX`) evaluate an expression **row by row**, then aggregate the results. They're needed whenever a calculation can't be done with a simple column reference — e.g., multiplying two columns together per row before summing.
+```dax
+Total Revenue =
+SUMX(
+    Sales,
+    Sales[Price] * Sales[Quantity]
+)
+```
+> 💡 Use `SUMX` instead of a calculated column when you don't want the value stored — it calculates fresh every time based on current filters.
+
+### `COUNTX()` / `AVERAGEX()`
+Same iterator logic as `SUMX`, just with a different final aggregation.
+```dax
+Count of Profitable Orders =
+COUNTX(
+    FILTER(Sales, Sales[Profit] > 0),
+    Sales[OrderID]
+)
+
+Average Order Value =
+AVERAGEX(
+    Sales,
+    Sales[Price] * Sales[Quantity]
+)
+```
+
+### `VALUES()`
+Returns a **table** of distinct values from a column, respecting the current filter context. Commonly used inside `CALCULATE`, `FILTER`, or to check how many items are currently selected.
+```dax
+Distinct Products Selling = COUNTROWS(VALUES(Products[ProductName]))
+```
+
+### `SELECTEDVALUE()`
+Returns the single selected value from a column when exactly one value is filtered (e.g., one item picked in a slicer) — otherwise returns a blank or a default you specify. Great for dynamic titles.
+```dax
+Selected Region = SELECTEDVALUE(Sales[Region], "All Regions")
+```
+
+### More Advanced `CALCULATE()` Patterns
+`CALCULATE()` can take multiple filter arguments, and combine with modifier functions for precise control:
+
+```dax
+// Multiple conditions
+Sales - East 2024 =
+CALCULATE(
+    SUM(Sales[SalesAmount]),
+    Sales[Region] = "East",
+    Sales[Year] = 2024
+)
+
+// KEEPFILTERS - adds to existing filters instead of overriding them
+Sales High Value =
+CALCULATE(
+    SUM(Sales[SalesAmount]),
+    KEEPFILTERS(Sales[SalesAmount] > 1000)
+)
+
+// ALLEXCEPT - removes all filters except the ones listed
+% of Category Total =
+DIVIDE(
+    SUM(Sales[SalesAmount]),
+    CALCULATE(SUM(Sales[SalesAmount]), ALLEXCEPT(Products, Products[Category]))
+)
+```
+
+### Ranking with `RANKX()`
+Ranks values in a column/measure against each other — great for "Top N Products" style visuals.
+```dax
+Product Rank =
+RANKX(
+    ALL(Products[ProductName]),
+    [Total Sales],
+    ,
+    DESC
+)
+```
+
+### Running Totals
+Accumulates a value over time (e.g., cumulative sales through the year).
+```dax
+Running Total Sales =
+CALCULATE(
+    SUM(Sales[SalesAmount]),
+    FILTER(
+        ALL('Date'),
+        'Date'[Date] <= MAX('Date'[Date])
+    )
+)
+```
+
+### Month-over-Month (MoM) Growth
+```dax
+Sales Previous Month =
+CALCULATE(
+    SUM(Sales[SalesAmount]),
+    PREVIOUSMONTH('Date'[Date])
+)
+
+MoM Growth % =
+DIVIDE(
+    [Total Sales] - [Sales Previous Month],
+    [Sales Previous Month]
+)
+```
+
+### Year-over-Year (YoY) Growth
+```dax
+Sales Previous Year =
+CALCULATE(
+    SUM(Sales[SalesAmount]),
+    SAMEPERIODLASTYEAR('Date'[Date])
+)
+
+YoY Growth % =
+DIVIDE(
+    [Total Sales] - [Sales Previous Year],
+    [Sales Previous Year]
+)
+```
+
+### Time Intelligence
+A family of built-in DAX functions that make date-based calculations easy — but they **require a proper Date Table** marked as such (see below).
+
+| Function | Purpose |
+|---|---|
+| `TOTALYTD()` | Year-to-date total |
+| `TOTALQTD()` | Quarter-to-date total |
+| `TOTALMTD()` | Month-to-date total |
+| `DATESYTD()` | Returns a table of dates from year start to current date |
+| `SAMEPERIODLASTYEAR()` | Shifts the current filter back exactly one year |
+| `PARALLELPERIOD()` | Shifts a date period by a given number of months/quarters/years |
+| `DATEADD()` | Flexible date shifting in either direction |
+
+```dax
+Sales YTD = TOTALYTD(SUM(Sales[SalesAmount]), 'Date'[Date])
+```
+
+---
+
+##  Data Modeling
+
+### Date Table
+A dedicated table containing one row per calendar date, used to power all Time Intelligence functions. Without it, YoY/MoM/YTD formulas won't work correctly.
+```dax
+DateTable =
+CALENDAR(DATE(2020,1,1), DATE(2026,12,31))
+```
+After creating it, go to `Table Tools → Mark as Date Table` and select the date column. Add helper columns like Year, Month Name, Quarter for easy slicing.
+
+### Star Schema
+The recommended way to structure a Power BI data model: **one central Fact table** surrounded by **Dimension tables**, connected by relationships — visually forming a "star" shape. It's faster, easier to maintain, and avoids duplicate/inconsistent data compared to one giant flat table.
+
+### Fact vs Dimension Tables
+- **Fact Table**: Contains transactional/numeric data that gets measured — e.g., `Sales` (SalesAmount, Quantity, OrderDate). Usually long and narrow (millions of rows, few columns).
+- **Dimension Table**: Contains descriptive attributes used to filter/group facts — e.g., `Products`, `Customers`, `Date`. Usually short and wide (fewer rows, more columns).
+
+> 💡 *Rule of thumb: if a column describes "who, what, where, when" → dimension. If it's a number you sum/count/average → fact.*
+
+### Relationships
+Links between tables based on a common column (usually a Dimension's primary key to a Fact's foreign key).
+- Go to the **Model view** → drag a column from one table to the matching column in another to create a relationship
+- Relationships have a **Cardinality**: One-to-Many (most common), One-to-One, or Many-to-Many
+
+### Cross-Filter Direction
+Controls which direction a filter can "flow" through a relationship.
+- **Single direction**: Filters flow from the "one" side (dimension) to the "many" side (fact) — the default and safest choice.
+- **Both (bidirectional)**: Filters flow both ways — powerful but can cause ambiguous filtering and performance issues if overused. Use only when needed (e.g., many-to-many bridge tables).
+
+### Many-to-Many Relationships
+Occurs when neither table has a unique key matching the other directly — e.g., a Customer can have many Bank Accounts, and an Account can be shared by many Customers. Solved by:
+1. Creating a **bridge table** containing the unique combinations, or
+2. Setting the relationship cardinality to "Many-to-Many" directly (supported in modern Power BI, but use carefully)
+
+### Advanced DAX KPI Patterns
+Combine measures to build reusable, dynamic KPI cards:
+```dax
+KPI Status =
+VAR CurrentSales = [Total Sales]
+VAR Target = [Sales Target]
+RETURN
+SWITCH(
+    TRUE(),
+    CurrentSales >= Target, "🟢 On Track",
+    CurrentSales >= Target * 0.8, "🟡 At Risk",
+    "🔴 Behind"
+)
+```
+> 💡 `VAR`/`RETURN` blocks make complex DAX measures far easier to read and debug — always prefer them over deeply nested formulas.
+
+---
+
+## 🎨 Reports & Visuals
+
+### Drill-Through
+Lets users right-click a data point (e.g., a specific product) and jump to a detailed page filtered to just that context.
+- Create a new report page → drag the relevant field into the **Drill through** filter well → right-click any visual value on another page → **Drill through**
+
+### Tooltips
+Custom mini report pages that appear when hovering over a visual, showing extra detail without cluttering the main view.
+- Create a page → set **Page Information → Allow use as tooltip** → set its size to "Tooltip" → assign it in the **Format → Tooltip** pane of your visual
+
+### Bookmarks
+Captures the current state of a report page (filters, slicer selections, visibility of objects) so it can be recalled instantly — used heavily for building interactive "guided" dashboards and toggle views.
+- `View → Bookmarks Pane → Add`
+
+### Buttons & Page Navigation
+Buttons combined with bookmarks or built-in navigation actions let users click through a report like an app instead of using page tabs.
+- `Insert → Buttons` → set the **Action** (Page navigation, Bookmark, Back, Web URL, etc.)
+
+### Conditional Formatting
+Dynamically changes the color/icon of cells, bars, or backgrounds based on a value or measure — great for highlighting KPIs at a glance.
+- Select a visual → `Format → Cell Elements` → choose a field → **Conditional Formatting** → Rules, Color Scale, or Data Bars
+
+### Advanced Matrix/Table Visuals
+Matrix visuals support drill-down hierarchies, subtotal control, and per-column formatting — much more powerful than a basic Table for multi-level reporting (e.g., Region → Country → City).
+- Enable **Row/Column subtotals**, use the **+/-** icons for drill-down, and apply conditional formatting per measure column
+
+### Dashboard Design Principles
+- Keep the most important KPI top-left (where the eye naturally goes first)
+- Use a consistent color palette — 2–3 core colors max, plus a highlight color
+- Avoid clutter — every visual should answer a specific business question
+- Use whitespace deliberately; don't fill every pixel
+- Group related visuals together, and follow a logical left-to-right, top-to-bottom reading flow
+
+---
+
+##  Power BI Service (Cloud)
+
+### Publish to Power BI Service
+Once your report is built in Power BI Desktop, publish it to the cloud for sharing.
+- `Home → Publish` → select a destination **Workspace**
+
+### Workspaces
+Cloud containers that organize related reports, dashboards, and datasets — similar to a folder, but with collaboration and access control built in. Types include personal workspaces and shared workspaces (for teams).
+
+### Refresh
+Keeps your published dataset up to date with the source data.
+- **Manual refresh**: Click "Refresh" in the Service
+- **Scheduled refresh**: Set up automatic refresh times in Dataset Settings (requires a **Gateway** if your data source is on-premises, like a local SQL Server or Excel file)
+
+### Sharing
+Multiple ways to distribute a report depending on audience:
+- **Share**: Direct link to specific people
+- **Apps**: Package multiple reports/dashboards into a polished, versioned "app" for a wider audience
+- **Embed**: Embed a report into a website, Teams, or SharePoint
+- **Publish to Web**: Public, unsecured embed (use with caution — no login required)
+
+### Row-Level Security (RLS)
+Restricts what data different users can see within the **same report** — e.g., a Regional Manager only sees their own region's sales.
+1. In Power BI Desktop: `Modeling → Manage Roles` → create a role → add a DAX filter
+```dax
+[Region] = "East"
+```
+2. For **dynamic RLS** (auto-detects the logged-in user), use:
+```dax
+[UserEmail] = USERPRINCIPALNAME()
+```
+3. Publish, then in the Service go to **Dataset Settings → Security** to assign users to roles.
+
+---
+
+
+## 📖 Resources
+
+- [Official Power BI Documentation](https://learn.microsoft.com/en-us/power-bi/)
+- [DAX Guide (SQLBI)](https://dax.guide/)
+- [Power Query M Function Reference](https://learn.microsoft.com/en-us/powerquery-m/)
+
+---
+
 
