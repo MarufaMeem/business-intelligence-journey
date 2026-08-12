@@ -325,3 +325,4 @@ SHOW PROCEDURE STATUS
 WHERE Db='business_intelligence_journey';
 
 DROP PROCEDURE employee_report;
+
