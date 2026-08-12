@@ -2456,9 +2456,9 @@ Without KPIs, management only sees raw data.
 With KPIs, management can make decisions quickly.
 
 ---
-# 📊 Power BI Complete Learning Guide
+# Power BI Complete Learning Guide
 
-![Power BI](Power/power.png)
+![Power BI](PowerBI/powerbi.png)
 
 
 ##  Table of Contents
@@ -2691,7 +2691,7 @@ SUMX(
     Sales[Price] * Sales[Quantity]
 )
 ```
-> 💡 Use `SUMX` instead of a calculated column when you don't want the value stored — it calculates fresh every time based on current filters.
+>  Use `SUMX` instead of a calculated column when you don't want the value stored — it calculates fresh every time based on current filters.
 
 ### `COUNTX()` / `AVERAGEX()`
 Same iterator logic as `SUMX`, just with a different final aggregation.
@@ -2839,7 +2839,7 @@ The recommended way to structure a Power BI data model: **one central Fact table
 - **Fact Table**: Contains transactional/numeric data that gets measured — e.g., `Sales` (SalesAmount, Quantity, OrderDate). Usually long and narrow (millions of rows, few columns).
 - **Dimension Table**: Contains descriptive attributes used to filter/group facts — e.g., `Products`, `Customers`, `Date`. Usually short and wide (fewer rows, more columns).
 
-> 💡 *Rule of thumb: if a column describes "who, what, where, when" → dimension. If it's a number you sum/count/average → fact.*
+>  *Rule of thumb: if a column describes "who, what, where, when" → dimension. If it's a number you sum/count/average → fact.*
 
 ### Relationships
 Links between tables based on a common column (usually a Dimension's primary key to a Fact's foreign key).
@@ -2865,16 +2865,16 @@ VAR Target = [Sales Target]
 RETURN
 SWITCH(
     TRUE(),
-    CurrentSales >= Target, "🟢 On Track",
-    CurrentSales >= Target * 0.8, "🟡 At Risk",
-    "🔴 Behind"
+    CurrentSales >= Target, "On Track",
+    CurrentSales >= Target * 0.8, " At Risk",
+    " Behind"
 )
 ```
-> 💡 `VAR`/`RETURN` blocks make complex DAX measures far easier to read and debug — always prefer them over deeply nested formulas.
+>  `VAR`/`RETURN` blocks make complex DAX measures far easier to read and debug — always prefer them over deeply nested formulas.
 
 ---
 
-## 🎨 Reports & Visuals
+##  Reports & Visuals
 
 ### Drill-Through
 Lets users right-click a data point (e.g., a specific product) and jump to a detailed page filtered to just that context.
@@ -2945,7 +2945,7 @@ Restricts what data different users can see within the **same report** — e.g.,
 ---
 
 
-## 📖 Resources
+##  Resources
 
 - [Official Power BI Documentation](https://learn.microsoft.com/en-us/power-bi/)
 - [DAX Guide (SQLBI)](https://dax.guide/)
