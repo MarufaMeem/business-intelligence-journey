@@ -25,27 +25,18 @@ Learn how to calculate totals, averages, highest values, and lowest values using
 
 ---
 
-## Step 1: Create the Dataset
+# Excel for Business Intelligence
 
-Open Microsoft Excel.
+This repository documents my Excel learning journey as part of my Business Intelligence Analyst roadmap.
 
-Create a new workbook.
+The goal was to learn how businesses organize, analyze, summarize, and visualize data before moving to SQL and Power BI.
 
-Enter the following data:
+---
+
+# Dataset Used
 
 | Employee | Department | Salary |
-|----------|------------|---------|
-| Rahim | Sales | 25000 |
-| Karim | HR | 30000 |
-| Jannat | Sales | 40000 |
-| Nila | IT | 50000 |
-| Rafi | HR | 35000 |
-
-Your sheet should look similar to:
-
-| A | B | C |
-|---|---|---|
-| Employee | Department | Salary |
+|-----------|------------|----------|
 | Rahim | Sales | 25000 |
 | Karim | HR | 30000 |
 | Jannat | Sales | 40000 |
@@ -54,159 +45,471 @@ Your sheet should look similar to:
 
 ---
 
-## Understanding Cell References
+# Project 01 - Excel Basics
 
-Excel identifies cells using:
+## Objective
 
-- Column letter (A, B, C, D...)
-- Row number (1, 2, 3, 4...)
+Learn the fundamentals of Excel formulas and salary analysis.
 
-Examples:
+## Screenshot
 
-| Cell | Meaning |
-|--------|---------|
-| A1 | Employee |
-| B2 | Sales |
-| C4 | 40000 |
+![Excel Basics](Excel/01_Excel_Basics_Screenshot.png)
 
-The salary values are located in:
+## Functions Used
 
-```text
-C2
-C3
-C4
-C5
-C6
-```
+### SUM()
 
-Therefore:
-
-```text
-C2:C6
-```
-
-means:
-
-```text
-Start at C2 and include every cell until C6.
-```
-
----
-
-# Exercise 1: Calculate Total Salary
-
-### Step 1
-
-Click on cell:
-
-```text
-C8
-```
-
-### Step 2
-
-Type:
+Calculates total salary.
 
 ```excel
 =SUM(C2:C6)
 ```
 
-### Step 3
-
-Press:
-
-```text
-Enter
-```
-
-### Result
-
-Excel should display:
+Output:
 
 ```text
 180000
 ```
 
-Explanation:
+Business Use:
 
-```text
-25000
-+30000
-+40000
-+50000
-+35000
---------
-180000
-```
+- Total payroll calculation
+- Revenue calculation
+- Expense tracking
 
 ---
 
-# Exercise 2: Calculate Average Salary
+### AVERAGE()
 
+Calculates average salary.
 
 ```excel
 =AVERAGE(C2:C6)
 ```
 
-### Result
+Output:
 
 ```text
 36000
 ```
 
+Business Use:
+
+- Average salary
+- Average sales
+- Average performance metrics
+
 ---
 
-# Exercise 3: Find Highest Salary
+### MAX()
 
+Returns highest salary.
 
 ```excel
 =MAX(C2:C6)
 ```
 
-### Result
+Output:
 
 ```text
 50000
 ```
 
+Business Use:
+
+- Highest sales
+- Top performer identification
+
 ---
 
-# Exercise 4: Find Lowest Salary
+### MIN()
 
+Returns lowest salary.
 
 ```excel
 =MIN(C2:C6)
 ```
 
-### Result
+Output:
 
 ```text
 25000
 ```
 
+Business Use:
+
+- Lowest salary analysis
+- Minimum sales tracking
+
 ---
 
-## What You Learned
+# Project 02 - IF Function
 
-1. How Excel identifies cells
+## Objective
 
-2. How ranges work
+Categorize employees based on salary.
 
-```text
-C2:C6
+## Screenshot
+
+![IF Function](Excel/02_IF_Function_Screenshot.png)
+
+## Formula
+
+```excel
+=IF(C2>30000,"High","Low")
 ```
 
- SUM
+## Output
 
- AVERAGE
+| Employee | Salary | Salary Level |
+|----------|----------|-------------|
+| Rahim | 25000 | Low |
+| Karim | 30000 | Low |
+| Jannat | 40000 | High |
+| Nila | 50000 | High |
+| Rafi | 35000 | High |
 
- MAX
+## What I Learned
 
- MIN
+- Conditional logic
+- Automated classification
+- Business rule implementation
+
+## Real Business Use
+
+Companies use IF statements for:
+
+- Employee grading
+- Bonus eligibility
+- Risk classification
+- Customer segmentation
 
 ---
 
-![Excel Basics](Excel/01_Excel_Basics_Screenshot.png)
+# Project 03 - COUNTIF Function
+
+## Objective
+
+Generate department-wise employee reports.
+
+## Screenshot
+
+![COUNTIF](Excel/03_COUNTIF_Screenshot.png)
+
+## Formulas
+
+### HR Employees
+
+```excel
+=COUNTIF(B2:B6,"HR")
+```
+
+Output:
+
+```text
+2
+```
+
+### Sales Employees
+
+```excel
+=COUNTIF(B2:B6,"Sales")
+```
+
+Output:
+
+```text
+2
+```
+
+### IT Employees
+
+```excel
+=COUNTIF(B2:B6,"IT")
+```
+
+Output:
+
+```text
+1
+```
+
+## Department Report
+
+| Department | Employee Count |
+|------------|----------------|
+| HR | 2 |
+| Sales | 2 |
+| IT | 1 |
+
+## What I Learned
+
+- Conditional counting
+- Workforce reporting
+- Department analysis
+
+## Business Use
+
+COUNTIF is widely used for:
+
+- Attendance reports
+- Employee counts
+- Sales transaction counts
+- Inventory tracking
+
+---
+
+# Project 04 - PivotTable
+
+## Objective
+
+Summarize large datasets quickly without complex formulas.
+
+## Screenshot
+
+![PivotTable](Excel/04_PivotTable_Screenshot.png)
+
+## Steps to Create
+
+### Step 1
+
+Select the dataset.
+
+### Step 2
+
+Click:
+
+```text
+Insert
+→ PivotTable
+```
+
+### Step 3
+
+Choose:
+
+```text
+New Worksheet
+```
+
+Click:
+
+```text
+OK
+```
+
+### Step 4
+
+Drag fields:
+
+Rows:
+
+```text
+Department
+```
+
+Values:
+
+```text
+Salary
+```
+
+Excel automatically creates a summarized report.
+
+## Output
+
+| Department | Total Salary |
+|------------|-------------|
+| HR | 65000 |
+| IT | 50000 |
+| Sales | 65000 |
+| Grand Total | 180000 |
+
+## What I Learned
+
+- Data aggregation
+- Dynamic reporting
+- Business summarization
+
+## Why PivotTables Matter
+
+Without PivotTables:
+
+- Manual calculations
+- Repeated formulas
+- Slower reporting
+
+With PivotTables:
+
+- Faster reporting
+- Dynamic analysis
+- Automatic summarization
+
+---
+
+# Project 05 - KPI Dashboard
+
+## Objective
+
+Create a simple Business Intelligence dashboard using Excel.
+
+## Screenshot
+
+![KPI Dashboard](Excel/05_KPI_Dashboard_Screenshot.png)
+
+## KPI Metrics
+
+### Total Employees
+
+```excel
+=COUNTA(A2:A6)
+```
+
+Output:
+
+```text
+5
+```
+
+### Total Salary
+
+```excel
+=SUM(C2:C6)
+```
+
+Output:
+
+```text
+180000
+```
+
+### Average Salary
+
+```excel
+=AVERAGE(C2:C6)
+```
+
+Output:
+
+```text
+36000
+```
+
+### Highest Salary
+
+```excel
+=MAX(C2:C6)
+```
+
+Output:
+
+```text
+50000
+```
+
+### Lowest Salary
+
+```excel
+=MIN(C2:C6)
+```
+
+Output:
+
+```text
+25000
+```
+
+## Dashboard Creation Steps
+
+### Step 1
+
+Create KPI table.
+
+### Step 2
+
+Select KPI values.
+
+### Step 3
+
+Click:
+
+```text
+Insert
+→ Column Chart
+```
+
+### Step 4
+
+Customize:
+
+- Chart Title
+- Data Labels
+- Font Size
+- Layout
+
+## Dashboard Purpose
+
+The dashboard provides an instant summary of:
+
+- Employee Count
+- Total Salary
+- Average Salary
+- Highest Salary
+- Lowest Salary
+
+---
+
+# Excel Skills Learned
+
+## Mathematical Functions
+
+```excel
+SUM()
+AVERAGE()
+MAX()
+MIN()
+COUNT()
+COUNTIF()
+```
+
+## Logical Functions
+
+```excel
+IF()
+```
+
+## Reporting Tools
+
+```text
+PivotTables
+Charts
+KPI Dashboards
+```
+
+## Business Intelligence Concepts
+
+- Data Analysis
+- Reporting
+- KPI Monitoring
+- Dashboard Development
+- Data Aggregation
+- Decision Support
+
+---
+
+# Learning Outcome
+
+After completing these projects, I can:
+
+- Analyze employee datasets
+- Create business reports
+- Build KPI dashboards
+- Summarize data using PivotTables
+- Apply conditional logic
+- Generate department-level insights
+- Prepare data for SQL and Power BI
+
+---
 
 # SQL Business Intelligence Journey
 
