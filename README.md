@@ -1813,17 +1813,9 @@ FROM employees;
 
 ---
 
-## Difference
 
-| Feature | RANK() | DENSE_RANK() |
-|----------|----------|----------|
-| Duplicate Values Share Rank | ✅ | ✅ |
-| Skips Rank Numbers | ✅ | ❌ |
-| Continuous Ranking | ❌ | ✅ |
 
----
 
-## When to Use
 
 ### Use RANK()
 
@@ -1857,31 +1849,8 @@ Example:
 
 ---
 
-## Business Intelligence Use Cases
-
-- Top Performing Employees
-- Highest Revenue Customers
-- Product Rankings
-- Sales Leaderboards
-- Performance Dashboards
-
----
 
 # Project 26 - LAG() and LEAD()
-
-## Objective
-
-Learn how to compare current values with previous and next values.
-
-These functions are commonly used in:
-
-- Sales Trend Analysis
-- KPI Dashboards
-- Growth Reports
-- Month-over-Month Analysis
-- Revenue Tracking
-
----
 
 ## LAG()
 
@@ -2463,6 +2432,7 @@ With KPIs, management can make decisions quickly.
 
 
 
+
 ---
 ##  What is Power BI?
 
@@ -2810,6 +2780,7 @@ Sales YTD = TOTALYTD(SUM(Sales[SalesAmount]), 'Date'[Date])
 ```
 
 ---
+![project](project.png)
 
 ##  Data Modeling
 
